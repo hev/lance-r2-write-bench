@@ -10,7 +10,7 @@
       "class_name": "LanceWriter",
       "image": "186219257916.dkr.ecr.us-east-1.amazonaws.com/hev-lance-r2-write-bench@sha256:a478e8d163bd08e611ebf03572e59a090116104e3e6f7e62b8ec0b253d63f60a",
       "instance_type": "lite",
-      "max_instances": 16
+      "max_instances": 32
     }
   ],
   "durable_objects": {
