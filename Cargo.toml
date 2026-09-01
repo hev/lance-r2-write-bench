@@ -1,0 +1,29 @@
+[package]
+name = "lance-r2-write-bench"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+publish = false
+
+[dependencies]
+anyhow = "1"
+arrow-array = "58"
+arrow-schema = { version = "58", features = ["serde"] }
+axum = "0.8"
+blake3 = "1"
+bytes = "1"
+futures = "0.3"
+lance = "=6.0.0"
+lancedb = { version = "=0.29.0", features = ["aws"] }
+object_store = { version = "0.12", features = ["aws"] }
+rand = "0.9"
+rand_chacha = "0.9"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["macros", "net", "rt-multi-thread", "time"] }
+tower-http = { version = "0.6", features = ["trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+[dev-dependencies]
+tower = { version = "0.5", features = ["util"] }

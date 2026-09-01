@@ -1,0 +1,33 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "lance-r2-write-bench",
+  "main": "worker/src/index.js",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "limits": { "cpu_ms": 30000 },
+  "containers": [
+    {
+      "class_name": "LanceWriter",
+      "image": "186219257916.dkr.ecr.us-east-1.amazonaws.com/hev-lance-r2-write-bench:bootstrap",
+      "instance_type": "lite",
+      "max_instances": 8
+    }
+  ],
+  "durable_objects": {
+    "bindings": [{ "name": "WRITERS", "class_name": "LanceWriter" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["LanceWriter"] }],
+  "ai": { "binding": "AI" },
+  "vars": {
+    "BENCH_STORAGE_URI": "s3://lance-r2-write-bench",
+    "BENCH_S3_REGION": "auto",
+    "BENCH_S3_ENDPOINT": "https://ACCOUNT_ID.r2.cloudflarestorage.com",
+    "BENCH_MAX_WRITERS": "8",
+    "BENCH_TEXT_MODEL": "@cf/baai/bge-base-en-v1.5"
+  },
+  "observability": {
+    "enabled": true,
+    "logs": { "enabled": true, "head_sampling_rate": 1 }
+  }
+}
+
