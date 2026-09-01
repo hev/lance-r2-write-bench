@@ -51,7 +51,8 @@ emit("trial_start", { spec, cursor, git_sha: process.env.GIT_SHA || null, image_
 let pages = 0;
 let indexed = false;
 while (cursor !== null) {
-  const pageSpec = { ...spec, cursor, max_chunks: cursor === 0 ? 1 : spec.max_chunks };
+  const minimumIndexChunks = Math.ceil(256 / spec.chunk_size);
+  const pageSpec = { ...spec, cursor, max_chunks: cursor === 0 ? Math.min(5, minimumIndexChunks) : spec.max_chunks };
   const pending = api("/run", { method: "POST", body: JSON.stringify(pageSpec) });
   if (indexed) await Promise.all([query(true), query(false)]);
   const result = await pending;
@@ -77,4 +78,3 @@ emit("verification", verify);
 await Promise.all([query(true), query(false)]);
 emit("trial_complete", { run_id: spec.run_id, valid: verify.body.valid });
 if (!verify.body.valid) process.exitCode = 1;
-
