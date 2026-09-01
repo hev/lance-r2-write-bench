@@ -37,6 +37,7 @@ export function validateRun(input, maxWriters) {
     writers,
     mode,
     seed: Number(input.seed || 1),
+    source_fixture: String(input.source_fixture || "synthetic-v1"),
     payload_shape: input.payload_shape || "vector-text",
     max_retries: Number(input.max_retries ?? 8),
     cursor: Number(input.cursor || 0),

@@ -1,6 +1,7 @@
 import { Container, getContainer } from "@cloudflare/containers";
 import { env as processEnv } from "cloudflare:workers";
 import { planInvocation, timingSafeEqual, validateRun } from "./protocol.js";
+import { readAndTransformFixture } from "./fixtures.js";
 
 export class LanceWriter extends Container {
   defaultPort = 3000;
@@ -41,6 +42,8 @@ export default {
     if (url.pathname === "/health" && request.method === "GET") return json({ ok: true });
     if (url.pathname === "/run" && request.method === "POST") {
       const spec = validateRun(await request.json(), Number(env.BENCH_MAX_WRITERS || 8));
+      const source = readAndTransformFixture(spec.source_fixture, spec);
+      spec.payload_shape = source.payload_shape;
       const invocation = planInvocation(spec);
       // Five writer calls leave one of the platform's six outbound slots free.
       const results = await Promise.all(invocation.chunks.map(async (chunk, index) => {
@@ -51,7 +54,7 @@ export default {
         return { producer_id: `${spec.run_id}-producer-${producer}`, writer_id: writerId, status: response.status, result: await response.json() };
       }));
       const failed = results.some((item) => item.status >= 300);
-      return json({ spec, chunks: results, next_cursor: failed ? spec.cursor : invocation.next_cursor,
+      return json({ spec, source, chunks: results, next_cursor: failed ? spec.cursor : invocation.next_cursor,
         total_chunks: invocation.total_chunks, complete: !failed && invocation.next_cursor === null }, failed ? 502 : 200);
     }
     if (url.pathname.startsWith("/status/") && request.method === "GET") {

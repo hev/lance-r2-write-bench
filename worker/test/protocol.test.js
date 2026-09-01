@@ -1,12 +1,20 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { planChunks, planInvocation, stableChunkId, validateRun } from "../src/protocol.js";
+import { readAndTransformFixture } from "../src/fixtures.js";
 
 test("chunk planning is deterministic and covers source exactly", () => {
   const input = { run_id: "r1", rows: 10, chunk_size: 4, seed: 7 };
   assert.deepEqual(planChunks(input), planChunks(input));
   assert.deepEqual(planChunks(input).map(({ start, rows }) => [start, rows]), [[0,4],[4,4],[8,2]]);
   assert.equal(stableChunkId("r1", 0, 4, 7), "r1:7:0:4");
+});
+
+test("source fixture is explicit and transformed without materializing rows", () => {
+  const transformed = readAndTransformFixture("synthetic-v1", { payload_shape: "vector-text" });
+  assert.equal(transformed.fixture_id, "synthetic-v1");
+  assert.equal(transformed.transform, "deterministic-vector-v1");
+  assert.throws(() => readAndTransformFixture("missing", {}));
 });
 
 test("mode and writer ceiling are explicit", () => {
