@@ -513,6 +513,7 @@ struct VerifyResponse {
     readable_versions: Vec<u64>,
     sampled_ids: Vec<String>,
     checksum: String,
+    payload_bytes: u64,
 }
 
 async fn verify(
@@ -548,7 +549,7 @@ async fn verify_inner(state: &AppState, request: &VerifyRequest) -> Result<Verif
     let table_schema = table.schema().await?;
     let batches: Vec<RecordBatch> = table
         .query()
-        .select(Select::columns(&["id", "seed", "vector"]))
+        .select(Select::columns(&["id", "seed", "payload_bytes", "vector"]))
         .execute()
         .await?
         .try_collect()
@@ -556,6 +557,7 @@ async fn verify_inner(state: &AppState, request: &VerifyRequest) -> Result<Verif
     let mut counts: HashMap<String, usize> = HashMap::new();
     let mut seed_matches = true;
     let mut checksum_pairs = Vec::new();
+    let mut payload_bytes = 0u64;
     for batch in &batches {
         let ids = batch
             .column_by_name("id")
@@ -569,10 +571,13 @@ async fn verify_inner(state: &AppState, request: &VerifyRequest) -> Result<Verif
             .as_any()
             .downcast_ref::<UInt64Array>()
             .context("seed type")?;
+        let bytes = batch.column_by_name("payload_bytes").context("payload_bytes column")?
+            .as_any().downcast_ref::<UInt32Array>().context("payload_bytes type")?;
         for row in 0..batch.num_rows() {
             let id = ids.value(row).to_string();
             *counts.entry(id.clone()).or_default() += 1;
             seed_matches &= seeds.value(row) == request.seed;
+            payload_bytes += u64::from(bytes.value(row));
             let index = id
                 .rsplit(':')
                 .next()
@@ -635,6 +640,7 @@ async fn verify_inner(state: &AppState, request: &VerifyRequest) -> Result<Verif
         readable_versions,
         sampled_ids,
         checksum: hasher.finalize().to_hex().to_string(),
+        payload_bytes,
     })
 }
 
