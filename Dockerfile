@@ -1,4 +1,7 @@
 FROM rust:1.94-bookworm AS builder
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends protobuf-compiler \
+    && rm -rf /var/lib/apt/lists/*
 WORKDIR /build
 COPY Cargo.toml Cargo.lock* ./
 COPY src ./src
@@ -12,4 +15,3 @@ COPY --from=builder /build/target/release/lance-r2-write-bench /usr/local/bin/la
 ENV BENCH_BIND=0.0.0.0:3000
 EXPOSE 3000
 ENTRYPOINT ["/usr/local/bin/lance-r2-write-bench"]
-
