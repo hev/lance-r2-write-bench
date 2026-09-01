@@ -5,7 +5,7 @@ import { readAndTransformFixture } from "./fixtures.js";
 
 export class LanceWriter extends Container {
   defaultPort = 3000;
-  sleepAfter = "10m";
+  sleepAfter = "30s";
   envVars = {
     BENCH_STORAGE_URI: processEnv.BENCH_STORAGE_URI,
     BENCH_S3_ENDPOINT: processEnv.BENCH_S3_ENDPOINT,
