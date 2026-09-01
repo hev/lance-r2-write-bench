@@ -21,6 +21,7 @@ use object_store::path::Path;
 use object_store::ObjectStore;
 use serde::{Deserialize, Serialize};
 use tokio::net::TcpListener;
+use tokio::sync::Mutex;
 use tracing_subscriber::EnvFilter;
 
 const TABLE: &str = "data";
@@ -31,6 +32,7 @@ struct AppState {
     storage_options: HashMap<String, String>,
     checkpoints: Arc<dyn ObjectStore>,
     auth_token: String,
+    funnel_commit_lock: Arc<Mutex<()>>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -86,9 +88,14 @@ struct CommitResponse {
 }
 
 fn peak_rss_kb() -> Option<u64> {
-    std::fs::read_to_string("/proc/self/status").ok()?.lines()
+    std::fs::read_to_string("/proc/self/status")
+        .ok()?
+        .lines()
         .find(|line| line.starts_with("VmHWM:"))?
-        .split_whitespace().nth(1)?.parse().ok()
+        .split_whitespace()
+        .nth(1)?
+        .parse()
+        .ok()
 }
 
 fn now_ms() -> u128 {
@@ -195,11 +202,19 @@ fn make_batch(request: &CommitRequest) -> Result<RecordBatch> {
         .iter()
         .map(|i| format!("synthetic row {i} seed {}", request.seed))
         .collect();
-    let payload_bytes: Vec<u32> = ids.iter().zip(&texts).map(|(id, text)| {
-        (id.len() + request.chunk_id.len() + request.writer_id.len() + text.len()
-            + request.payload_shape.len() + request.dimensions as usize * size_of::<f32>()
-            + size_of::<u64>() * 2) as u32
-    }).collect();
+    let payload_bytes: Vec<u32> = ids
+        .iter()
+        .zip(&texts)
+        .map(|(id, text)| {
+            (id.len()
+                + request.chunk_id.len()
+                + request.writer_id.len()
+                + text.len()
+                + request.payload_shape.len()
+                + request.dimensions as usize * size_of::<f32>()
+                + size_of::<u64>() * 2) as u32
+        })
+        .collect();
     let mut values = Vec::with_capacity(request.rows * request.dimensions as usize);
     for index in &source {
         for dimension in 0..request.dimensions as u64 {
@@ -291,6 +306,11 @@ async fn commit(
             Json(serde_json::json!({"error":"unauthorized"})),
         );
     }
+    let _funnel_guard = if request.mode == "funnel" {
+        Some(state.funnel_commit_lock.lock().await)
+    } else {
+        None
+    };
     match commit_inner(&state, &request).await {
         Ok(response) => (
             StatusCode::OK,
@@ -571,8 +591,12 @@ async fn verify_inner(state: &AppState, request: &VerifyRequest) -> Result<Verif
             .as_any()
             .downcast_ref::<UInt64Array>()
             .context("seed type")?;
-        let bytes = batch.column_by_name("payload_bytes").context("payload_bytes column")?
-            .as_any().downcast_ref::<UInt32Array>().context("payload_bytes type")?;
+        let bytes = batch
+            .column_by_name("payload_bytes")
+            .context("payload_bytes column")?
+            .as_any()
+            .downcast_ref::<UInt32Array>()
+            .context("payload_bytes type")?;
         for row in 0..batch.num_rows() {
             let id = ids.value(row).to_string();
             *counts.entry(id.clone()).or_default() += 1;
@@ -825,6 +849,7 @@ async fn main() -> Result<()> {
         storage_options,
         checkpoints,
         auth_token: std::env::var("BENCH_AUTH_TOKEN").context("BENCH_AUTH_TOKEN")?,
+        funnel_commit_lock: Arc::new(Mutex::new(())),
     };
     let app = Router::new()
         .route("/health", get(health))
