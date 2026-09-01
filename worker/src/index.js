@@ -1,6 +1,6 @@
 import { Container, getContainer } from "@cloudflare/containers";
 import { env as processEnv } from "cloudflare:workers";
-import { planChunks, timingSafeEqual, validateRun } from "./protocol.js";
+import { planInvocation, timingSafeEqual, validateRun } from "./protocol.js";
 
 export class LanceWriter extends Container {
   defaultPort = 3000;
@@ -41,22 +41,33 @@ export default {
     if (url.pathname === "/health" && request.method === "GET") return json({ ok: true });
     if (url.pathname === "/run" && request.method === "POST") {
       const spec = validateRun(await request.json(), Number(env.BENCH_MAX_WRITERS || 8));
-      const chunks = planChunks(spec);
-      const results = [];
-      // Each wave stays below Workers' six simultaneous outbound connections.
-      for (let offset = 0; offset < chunks.length; offset += 5) {
-        const wave = chunks.slice(offset, offset + 5);
-        const responses = await Promise.all(wave.map(async (chunk, index) => {
-          const producer = (offset + index) % spec.writers;
-          const writerIndex = spec.mode === "funnel" ? 0 : producer;
-          const writerId = `${spec.run_id}-writer-${writerIndex}`;
-          const response = await callWriter(env, writerId, "/chunks/commit", { ...spec, ...chunk }, env.BENCH_AUTH_TOKEN);
-          return { writer_id: writerId, status: response.status, result: await response.json() };
-        }));
-        results.push(...responses);
-        if (responses.some((item) => item.status >= 300)) return json({ spec, chunks: results, complete: false }, 502);
-      }
-      return json({ spec, chunks: results, complete: true });
+      const invocation = planInvocation(spec);
+      // Five writer calls leave one of the platform's six outbound slots free.
+      const results = await Promise.all(invocation.chunks.map(async (chunk, index) => {
+        const producer = (spec.cursor + index) % spec.writers;
+        const writerIndex = spec.mode === "funnel" ? 0 : producer;
+        const writerId = `${spec.run_id}-writer-${writerIndex}`;
+        const response = await callWriter(env, writerId, "/chunks/commit", { ...spec, ...chunk }, env.BENCH_AUTH_TOKEN);
+        return { producer_id: `${spec.run_id}-producer-${producer}`, writer_id: writerId, status: response.status, result: await response.json() };
+      }));
+      const failed = results.some((item) => item.status >= 300);
+      return json({ spec, chunks: results, next_cursor: failed ? spec.cursor : invocation.next_cursor,
+        total_chunks: invocation.total_chunks, complete: !failed && invocation.next_cursor === null }, failed ? 502 : 200);
+    }
+    if (url.pathname.startsWith("/status/") && request.method === "GET") {
+      const runId = decodeURIComponent(url.pathname.slice("/status/".length));
+      const writer = getContainer(env.WRITERS, `${runId}-writer-0`);
+      const response = await writer.fetch(new Request(`http://writer/runs/${encodeURIComponent(runId)}/status`, {
+        headers: { authorization: `Bearer ${env.BENCH_AUTH_TOKEN}` },
+      }));
+      return new Response(response.body, { status: response.status, headers: response.headers });
+    }
+    if (["/verify", "/query", "/index"].includes(url.pathname) && request.method === "POST") {
+      const input = await request.json();
+      const runId = String(input.run_id || "");
+      if (!runId) return json({ error: "run_id is required" }, 400);
+      const response = await callWriter(env, `${runId}-writer-0`, url.pathname, input, env.BENCH_AUTH_TOKEN);
+      return new Response(response.body, { status: response.status, headers: response.headers });
     }
     if (url.pathname === "/embed/text" && request.method === "POST") {
       const input = await request.json();
@@ -68,4 +79,3 @@ export default {
     return json({ error: "not found" }, 404);
   }
 };
-

@@ -39,6 +39,18 @@ export function validateRun(input, maxWriters) {
     seed: Number(input.seed || 1),
     payload_shape: input.payload_shape || "vector-text",
     max_retries: Number(input.max_retries ?? 8),
+    cursor: Number(input.cursor || 0),
+    max_chunks: Number(input.max_chunks || 5),
   };
 }
 
+export function planInvocation(spec) {
+  if (!Number.isSafeInteger(spec.cursor) || spec.cursor < 0) throw new Error("cursor must be a non-negative integer");
+  if (!Number.isSafeInteger(spec.max_chunks) || spec.max_chunks < 1 || spec.max_chunks > 5) {
+    throw new Error("max_chunks must be 1..5");
+  }
+  const all = planChunks(spec);
+  const chunks = all.slice(spec.cursor, spec.cursor + spec.max_chunks);
+  const nextCursor = spec.cursor + chunks.length;
+  return { chunks, next_cursor: nextCursor < all.length ? nextCursor : null, total_chunks: all.length };
+}
