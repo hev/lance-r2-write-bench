@@ -21,7 +21,7 @@
   "vars": {
     "BENCH_STORAGE_URI": "s3://lance-r2-write-bench",
     "BENCH_S3_REGION": "auto",
-    "BENCH_S3_ENDPOINT": "https://ACCOUNT_ID.r2.cloudflarestorage.com",
+    "BENCH_S3_ENDPOINT": "https://ce0c7a0a6b9935ddf1a641fd32f596b5.r2.cloudflarestorage.com",
     "BENCH_MAX_WRITERS": "8",
     "BENCH_TEXT_MODEL": "@cf/baai/bge-base-en-v1.5"
   },
@@ -30,4 +30,3 @@
     "logs": { "enabled": true, "head_sampling_rate": 1 }
   }
 }
-

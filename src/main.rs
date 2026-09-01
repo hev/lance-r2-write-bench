@@ -82,6 +82,13 @@ struct CommitResponse {
     elapsed_ms: u128,
     commit_attempts: u32,
     conflict_retries: u32,
+    peak_rss_kb: Option<u64>,
+}
+
+fn peak_rss_kb() -> Option<u64> {
+    std::fs::read_to_string("/proc/self/status").ok()?.lines()
+        .find(|line| line.starts_with("VmHWM:"))?
+        .split_whitespace().nth(1)?.parse().ok()
 }
 
 fn now_ms() -> u128 {
@@ -188,7 +195,11 @@ fn make_batch(request: &CommitRequest) -> Result<RecordBatch> {
         .iter()
         .map(|i| format!("synthetic row {i} seed {}", request.seed))
         .collect();
-    let payload_bytes = vec![request.payload_shape.len() as u32; request.rows];
+    let payload_bytes: Vec<u32> = ids.iter().zip(&texts).map(|(id, text)| {
+        (id.len() + request.chunk_id.len() + request.writer_id.len() + text.len()
+            + request.payload_shape.len() + request.dimensions as usize * size_of::<f32>()
+            + size_of::<u64>() * 2) as u32
+    }).collect();
     let mut values = Vec::with_capacity(request.rows * request.dimensions as usize);
     for index in &source {
         for dimension in 0..request.dimensions as u64 {
@@ -302,6 +313,7 @@ async fn commit_inner(state: &AppState, request: &CommitRequest) -> Result<Commi
                 commit_attempts: 0,
                 checkpoint,
                 elapsed_ms: started.elapsed().as_millis(),
+                peak_rss_kb: peak_rss_kb(),
             });
         }
     }
@@ -361,6 +373,7 @@ async fn commit_inner(state: &AppState, request: &CommitRequest) -> Result<Commi
                 elapsed_ms: started.elapsed().as_millis(),
                 commit_attempts: attempt,
                 conflict_retries: attempt,
+                peak_rss_kb: peak_rss_kb(),
             });
         }
         checkpoint.state = CheckpointState::CommitAttempted;
@@ -383,6 +396,7 @@ async fn commit_inner(state: &AppState, request: &CommitRequest) -> Result<Commi
                     elapsed_ms: started.elapsed().as_millis(),
                     commit_attempts: attempt + 1,
                     conflict_retries: attempt,
+                    peak_rss_kb: peak_rss_kb(),
                 });
             }
             Err(error) if retryable(&error.to_string()) && attempt < request.max_retries => {

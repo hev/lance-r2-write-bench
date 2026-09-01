@@ -39,7 +39,8 @@ export default {
   async fetch(request, env) {
     if (!authorized(request, env.BENCH_AUTH_TOKEN)) return json({ error: "unauthorized" }, 401);
     const url = new URL(request.url);
-    if (url.pathname === "/health" && request.method === "GET") return json({ ok: true });
+    const platform = { colo: request.cf?.colo || null, region: request.cf?.region || null };
+    if (url.pathname === "/health" && request.method === "GET") return json({ ok: true, platform });
     if (url.pathname === "/run" && request.method === "POST") {
       const spec = validateRun(await request.json(), Number(env.BENCH_MAX_WRITERS || 8));
       const source = readAndTransformFixture(spec.source_fixture, spec);
@@ -54,7 +55,7 @@ export default {
         return { producer_id: `${spec.run_id}-producer-${producer}`, writer_id: writerId, status: response.status, result: await response.json() };
       }));
       const failed = results.some((item) => item.status >= 300);
-      return json({ spec, source, chunks: results, next_cursor: failed ? spec.cursor : invocation.next_cursor,
+      return json({ spec, source, platform, chunks: results, next_cursor: failed ? spec.cursor : invocation.next_cursor,
         total_chunks: invocation.total_chunks, complete: !failed && invocation.next_cursor === null }, failed ? 502 : 200);
     }
     if (url.pathname.startsWith("/status/") && request.method === "GET") {
@@ -77,7 +78,7 @@ export default {
       const started = Date.now();
       const output = await env.AI.run(env.BENCH_TEXT_MODEL, { text: [String(input.text)] });
       const vector = output.data?.[0] || [];
-      return json({ model: env.BENCH_TEXT_MODEL, dimensions: vector.length, latency_ms: Date.now() - started, usage: output.usage || null, vector });
+      return json({ model: env.BENCH_TEXT_MODEL, dimensions: vector.length, latency_ms: Date.now() - started, usage: output.usage || null, platform, vector });
     }
     return json({ error: "not found" }, 404);
   }
