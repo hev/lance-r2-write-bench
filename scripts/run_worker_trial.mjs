@@ -26,13 +26,29 @@ function emit(event, value = {}) {
 
 async function api(path, init = {}) {
   const started = performance.now();
-  const response = await fetch(new URL(path, baseUrl), {
-    ...init,
-    headers: { authorization: `Bearer ${token}`, "content-type": "application/json", ...(init.headers || {}) },
-  });
-  const body = await response.json();
-  if (!response.ok) throw new Error(`${path}: ${response.status} ${JSON.stringify(body)}`);
-  return { body, wall_ms: performance.now() - started, colo: response.headers.get("cf-ray")?.split("-")[1] || null };
+  for (let attempt = 0; attempt <= 5; attempt++) {
+    try {
+      const response = await fetch(new URL(path, baseUrl), {
+        ...init,
+        headers: { authorization: `Bearer ${token}`, "content-type": "application/json", ...(init.headers || {}) },
+      });
+      const text = await response.text();
+      let body;
+      try { body = JSON.parse(text); } catch { body = { non_json_body: text.slice(0, 500) }; }
+      if (response.ok) return { body, wall_ms: performance.now() - started, colo: response.headers.get("cf-ray")?.split("-")[1] || null, transport_retries: attempt };
+      if (response.status < 500 && response.status !== 429) throw new Error(`${path}: ${response.status} ${JSON.stringify(body)}`);
+      if (attempt === 5) throw new Error(`${path}: ${response.status} ${JSON.stringify(body)}`);
+      const delay_ms = 250 * 2 ** attempt + (attempt * 37) % 101;
+      emit("client_retry", { path, attempt: attempt + 1, status: response.status, delay_ms, body });
+      await new Promise((resolve) => setTimeout(resolve, delay_ms));
+    } catch (error) {
+      if (attempt === 5 || String(error).includes(`${path}: 4`)) throw error;
+      const delay_ms = 250 * 2 ** attempt + (attempt * 37) % 101;
+      emit("client_retry", { path, attempt: attempt + 1, status: null, delay_ms, error: String(error) });
+      await new Promise((resolve) => setTimeout(resolve, delay_ms));
+    }
+  }
+  throw new Error(`${path}: exhausted transport retries`);
 }
 
 async function query(exact) {
