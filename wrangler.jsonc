@@ -8,7 +8,7 @@
   "containers": [
     {
       "class_name": "LanceWriter",
-      "image": "186219257916.dkr.ecr.us-east-1.amazonaws.com/hev-lance-r2-write-bench:bootstrap",
+      "image": "186219257916.dkr.ecr.us-east-1.amazonaws.com/hev-lance-r2-write-bench@sha256:9e07deaafb7d3be06781e870e3a1d6751f7fe5eaf2a8a968e8b21a7843877a22",
       "instance_type": "lite",
       "max_instances": 8
     }
