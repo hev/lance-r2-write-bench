@@ -43,7 +43,7 @@
     "p95": 5559.626916999998,
     "max": 5559.626916999998
   },
-  "stale_version_observations": 0,
+  "stale_version_observations": 10,
   "unreadable_or_partial_observations": 0,
   "r2_operation_counts": null,
   "r2_operation_note": "R2 per-prefix request/byte counters are not exposed to this Worker; dataset payload bytes are reported above",

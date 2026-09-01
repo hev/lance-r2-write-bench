@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { planChunks, planInvocation, stableChunkId, validateRun } from "../src/protocol.js";
+import { checkpointTransitionAllowed, planChunks, planInvocation, stableChunkId, validateRun } from "../src/protocol.js";
 import { readAndTransformFixture } from "../src/fixtures.js";
 
 test("chunk planning is deterministic and covers source exactly", () => {
@@ -8,6 +8,16 @@ test("chunk planning is deterministic and covers source exactly", () => {
   assert.deepEqual(planChunks(input), planChunks(input));
   assert.deepEqual(planChunks(input).map(({ start, rows }) => [start, rows]), [[0,4],[4,4],[8,2]]);
   assert.equal(stableChunkId("r1", 0, 4, 7), "r1:7:0:4");
+  assert.equal(stableChunkId("r1", 0, 4, 7), stableChunkId("r1", 0, 4, 7));
+  assert.notEqual(stableChunkId("r1", 0, 4, 7), stableChunkId("r1", 4, 4, 7));
+});
+
+test("checkpoint transitions permit retry/idempotency but reject regression", () => {
+  assert.equal(checkpointTransitionAllowed("prepared", "commit-attempted"), true);
+  assert.equal(checkpointTransitionAllowed("commit-attempted", "committed"), true);
+  assert.equal(checkpointTransitionAllowed("committed", "committed"), true);
+  assert.equal(checkpointTransitionAllowed("committed", "prepared"), false);
+  assert.equal(checkpointTransitionAllowed("failed", "committed"), false);
 });
 
 test("source fixture is explicit and transformed without materializing rows", () => {

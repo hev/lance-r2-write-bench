@@ -1,0 +1,308 @@
+[
+  {
+    "wallTime": 28,
+    "cpuTime": 0,
+    "truncated": false,
+    "executionModel": "durableObject",
+    "outcome": "ok",
+    "durableObjectId": "3800acf78800961f4aeed0ccddb06701183718ba8d559b6f37de193a91e6f484",
+    "scriptVersion": {
+      "id": "bdd2f9db-a0ca-492f-ab73-bf450bd4154f"
+    },
+    "entrypoint": "LanceWriter",
+    "scriptName": "lance-r2-write-bench",
+    "diagnosticsChannelEvents": [],
+    "exceptions": [],
+    "logs": [
+      {
+        "message": [
+          "Activity expired, signalling container to stop"
+        ],
+        "level": "log",
+        "timestamp": 1788288043001
+      }
+    ],
+    "eventTimestamp": 1788288042979,
+    "event": {
+      "scheduledTime": "2026-09-01T18:40:12.967Z"
+    }
+  },
+  {
+    "wallTime": 33,
+    "cpuTime": 0,
+    "truncated": false,
+    "executionModel": "durableObject",
+    "outcome": "ok",
+    "durableObjectId": "efad2c121db7963cd927349dfc5e2b8a81cbbe766538b70fb21c5386c85dd428",
+    "scriptVersion": {
+      "id": "bdd2f9db-a0ca-492f-ab73-bf450bd4154f"
+    },
+    "entrypoint": "LanceWriter",
+    "scriptName": "lance-r2-write-bench",
+    "diagnosticsChannelEvents": [],
+    "exceptions": [],
+    "logs": [
+      {
+        "message": [
+          "Activity expired, signalling container to stop"
+        ],
+        "level": "log",
+        "timestamp": 1788288043122
+      }
+    ],
+    "eventTimestamp": 1788288043098,
+    "event": {
+      "scheduledTime": "2026-09-01T18:40:13.052Z"
+    }
+  },
+  {
+    "wallTime": 1,
+    "cpuTime": 0,
+    "truncated": false,
+    "executionModel": "stateless",
+    "outcome": "ok",
+    "scriptVersion": {
+      "id": "bdd2f9db-a0ca-492f-ab73-bf450bd4154f"
+    },
+    "scriptName": "lance-r2-write-bench",
+    "diagnosticsChannelEvents": [],
+    "exceptions": [],
+    "logs": [],
+    "eventTimestamp": 1788288044727,
+    "event": {
+      "request": {
+        "url": "https://lance-r2-write-bench.hevmind.workers.dev/health",
+        "method": "GET",
+        "headers": {
+          "accept": "*/*",
+          "accept-encoding": "gzip, br",
+          "authorization": "REDACTED",
+          "cf-ipcountry": "US",
+          "cf-ray": "a34667b77b182d49",
+          "cf-visitor": "{\"scheme\":\"https\"}",
+          "connection": "Keep-Alive",
+          "host": "lance-r2-write-bench.hevmind.workers.dev",
+          "user-agent": "curl/8.7.1",
+          "x-forwarded-proto": "https"
+        },
+        "cf": {
+          "httpProtocol": "HTTP/2",
+          "requestPriority": "weight=16;exclusive=0;group=0;group-weight=0",
+          "edgeRequestKeepAliveStatus": 1,
+          "requestHeaderNames": {},
+          "clientQuicRtt": 0,
+          "colo": "DEN",
+          "country": "US",
+          "isEUCountry": false,
+          "city": "Denver",
+          "continent": "NA",
+          "region": "Colorado",
+          "regionCode": "CO",
+          "timezone": "America/Denver",
+          "metroCode": "751",
+          "tlsVersion": "TLSv1.3",
+          "tlsCipher": "AEAD-CHACHA20-POLY1305-SHA256",
+          "tlsClientHelloLength": "341",
+          "tlsClientAuth": {
+            "certPresented": "0",
+            "certVerified": "NONE",
+            "certRevoked": "0",
+            "certIssuerDN": "",
+            "certSubjectDN": "",
+            "certIssuerDNRFC2253": "",
+            "certSubjectDNRFC2253": "",
+            "certIssuerDNLegacy": "",
+            "certSubjectDNLegacy": "",
+            "certSerial": "",
+            "certIssuerSerial": "",
+            "certSKI": "",
+            "certIssuerSKI": "",
+            "certFingerprintSHA1": "",
+            "certFingerprintSHA256": "",
+            "certNotBefore": "",
+            "certNotAfter": "",
+            "certRFC9440": "",
+            "certRFC9440TooLarge": false,
+            "certChainRFC9440": "",
+            "certChainRFC9440TooLarge": false
+          },
+          "verifiedBotCategory": "",
+          "edgeL4": {
+            "deliveryRate": 1221597
+          }
+        }
+      },
+      "response": {
+        "status": 200
+      }
+    }
+  },
+  {
+    "wallTime": 26,
+    "cpuTime": 0,
+    "truncated": false,
+    "executionModel": "durableObject",
+    "outcome": "ok",
+    "durableObjectId": "f2bbf73eaa1f35d8e02d3273bc767b0e15955fd642b16f5c12f66210024a5d9e",
+    "scriptVersion": {
+      "id": "bdd2f9db-a0ca-492f-ab73-bf450bd4154f"
+    },
+    "entrypoint": "LanceWriter",
+    "scriptName": "lance-r2-write-bench",
+    "diagnosticsChannelEvents": [],
+    "exceptions": [],
+    "logs": [
+      {
+        "message": [
+          "Activity expired, signalling container to stop"
+        ],
+        "level": "log",
+        "timestamp": 1788288045145
+      }
+    ],
+    "eventTimestamp": 1788288045126,
+    "event": {
+      "scheduledTime": "2026-09-01T18:40:15.118Z"
+    }
+  },
+  {
+    "wallTime": 3378,
+    "cpuTime": 1,
+    "truncated": false,
+    "executionModel": "stateless",
+    "outcome": "ok",
+    "scriptVersion": {
+      "id": "bdd2f9db-a0ca-492f-ab73-bf450bd4154f"
+    },
+    "scriptName": "lance-r2-write-bench",
+    "diagnosticsChannelEvents": [],
+    "exceptions": [],
+    "logs": [],
+    "eventTimestamp": 1788288044772,
+    "event": {
+      "request": {
+        "url": "https://lance-r2-write-bench.hevmind.workers.dev/query",
+        "method": "POST",
+        "headers": {
+          "accept": "*/*",
+          "accept-encoding": "gzip, br",
+          "authorization": "REDACTED",
+          "cf-ipcountry": "US",
+          "cf-ray": "a34667b7cc3de736",
+          "cf-visitor": "{\"scheme\":\"https\"}",
+          "connection": "Keep-Alive",
+          "content-length": "102",
+          "content-type": "application/json",
+          "host": "lance-r2-write-bench.hevmind.workers.dev",
+          "user-agent": "curl/8.7.1",
+          "x-forwarded-proto": "https"
+        },
+        "cf": {
+          "httpProtocol": "HTTP/2",
+          "requestPriority": "weight=16;exclusive=0;group=0;group-weight=0",
+          "edgeRequestKeepAliveStatus": 1,
+          "requestHeaderNames": {},
+          "clientQuicRtt": 0,
+          "colo": "DEN",
+          "country": "US",
+          "isEUCountry": false,
+          "city": "Denver",
+          "continent": "NA",
+          "region": "Colorado",
+          "regionCode": "CO",
+          "timezone": "America/Denver",
+          "metroCode": "751",
+          "tlsVersion": "TLSv1.3",
+          "tlsCipher": "AEAD-CHACHA20-POLY1305-SHA256",
+          "tlsClientHelloLength": "341",
+          "tlsClientAuth": {
+            "certPresented": "0",
+            "certVerified": "NONE",
+            "certRevoked": "0",
+            "certIssuerDN": "",
+            "certSubjectDN": "",
+            "certIssuerDNRFC2253": "",
+            "certSubjectDNRFC2253": "",
+            "certIssuerDNLegacy": "",
+            "certSubjectDNLegacy": "",
+            "certSerial": "",
+            "certIssuerSerial": "",
+            "certSKI": "",
+            "certIssuerSKI": "",
+            "certFingerprintSHA1": "",
+            "certFingerprintSHA256": "",
+            "certNotBefore": "",
+            "certNotAfter": "",
+            "certRFC9440": "",
+            "certRFC9440TooLarge": false,
+            "certChainRFC9440": "",
+            "certChainRFC9440TooLarge": false
+          },
+          "verifiedBotCategory": "",
+          "edgeL4": {
+            "deliveryRate": 1199006
+          }
+        }
+      },
+      "response": {
+        "status": 200
+      }
+    }
+  },
+  {
+    "wallTime": 26,
+    "cpuTime": 0,
+    "truncated": false,
+    "executionModel": "durableObject",
+    "outcome": "ok",
+    "durableObjectId": "f9938402d04e729a9c1bfd6b632063a803d236f00a06ff1aea05dcaff5079522",
+    "scriptVersion": {
+      "id": "bdd2f9db-a0ca-492f-ab73-bf450bd4154f"
+    },
+    "entrypoint": "LanceWriter",
+    "scriptName": "lance-r2-write-bench",
+    "diagnosticsChannelEvents": [],
+    "exceptions": [],
+    "logs": [
+      {
+        "message": [
+          "Activity expired, signalling container to stop"
+        ],
+        "level": "log",
+        "timestamp": 1788288049054
+      }
+    ],
+    "eventTimestamp": 1788288049031,
+    "event": {
+      "scheduledTime": "2026-09-01T18:40:19.011Z"
+    }
+  },
+  {
+    "wallTime": 31,
+    "cpuTime": 0,
+    "truncated": false,
+    "executionModel": "durableObject",
+    "outcome": "ok",
+    "durableObjectId": "c8493a2801c9fbd120dda6dedf2acf02c32ace4b3a8966c5af78b033b6830488",
+    "scriptVersion": {
+      "id": "bdd2f9db-a0ca-492f-ab73-bf450bd4154f"
+    },
+    "entrypoint": "LanceWriter",
+    "scriptName": "lance-r2-write-bench",
+    "diagnosticsChannelEvents": [],
+    "exceptions": [],
+    "logs": [
+      {
+        "message": [
+          "Activity expired, signalling container to stop"
+        ],
+        "level": "log",
+        "timestamp": 1788288050335
+      }
+    ],
+    "eventTimestamp": 1788288050315,
+    "event": {
+      "scheduledTime": "2026-09-01T18:40:20.300Z"
+    }
+  }
+]

@@ -1,0 +1,82 @@
+{
+  "run_id": "r2-smoke-2w-20260901",
+  "started_at": "2026-09-01T18:03:40.577Z",
+  "finished_at": "2026-09-01T18:04:41.285Z",
+  "git_sha": "b339d04",
+  "image_digest": "sha256:9e07deaafb7d3be06781e870e3a1d6751f7fe5eaf2a8a968e8b21a7843877a22",
+  "mode": "independent",
+  "seed": 101,
+  "rows": 2000,
+  "dimensions": 64,
+  "batch_size": 128,
+  "chunk_size": 250,
+  "producer_count": 2,
+  "actual_writer_ids": [
+    "r2-smoke-2w-20260901-writer-0",
+    "r2-smoke-2w-20260901-writer-1"
+  ],
+  "chunks": 8,
+  "commit_attempts": 8,
+  "outer_conflict_retries": 0,
+  "observed_rebases": 11,
+  "exhausted_retries": 0,
+  "retry_delay_policy": "deterministic jitter: 25ms * 2^attempt (capped at attempt 6) + 0..40ms",
+  "elapsed_seconds": 60.708,
+  "rows_per_second": 32.94458720432233,
+  "payload_bytes": 790280,
+  "bytes_per_second": 13017.724187915926,
+  "peak_writer_rss_kb": 100628,
+  "checkpoint_states": {
+    "prepared": 0,
+    "commit_attempted": 0,
+    "committed": 8,
+    "failed": 0
+  },
+  "orphan_checkpoints": 0,
+  "lance_versions_created": 10,
+  "query_successes": 4,
+  "query_errors": 0,
+  "query_latency_ms": {
+    "p50": 2567.616082999999,
+    "p95": 2985.0207919999993,
+    "max": 2985.0207919999993
+  },
+  "stale_version_observations": 2,
+  "unreadable_or_partial_observations": 0,
+  "r2_operation_counts": null,
+  "r2_operation_note": "R2 per-prefix request/byte counters are not exposed to this Worker; dataset payload bytes are reported above",
+  "verification": {
+    "actual_rows": 2000,
+    "checksum": "194195f2ef9086794b0568245eaaf24b924042ece88c99c9fa5ab0a12e24580d",
+    "duplicate_ids": [],
+    "expected_rows": 2000,
+    "missing_ids": [],
+    "payload_bytes": 790280,
+    "readable_versions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "run_id": "r2-smoke-2w-20260901",
+    "sampled_ids": [
+      "r2-smoke-2w-20260901:0",
+      "r2-smoke-2w-20260901:1",
+      "r2-smoke-2w-20260901:2",
+      "r2-smoke-2w-20260901:1999",
+      "r2-smoke-2w-20260901:1998",
+      "r2-smoke-2w-20260901:1997"
+    ],
+    "schema_matches": true,
+    "seed_matches": true,
+    "unique_ids": 2000,
+    "valid": true,
+    "vector_dimensions": 64
+  }
+}

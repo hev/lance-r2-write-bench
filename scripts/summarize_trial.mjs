@@ -49,7 +49,7 @@ const summary = {
   query_successes: queries.filter((query) => query.ok).length,
   query_errors: queries.filter((query) => !query.ok).length,
   query_latency_ms: { p50: percentile(0.5), p95: percentile(0.95), max: latencies.at(-1) || null },
-  stale_version_observations: finalVersion ? queries.filter((query) => query.ok && query.body.lance_version < finalVersion).length : null,
+  stale_version_observations: finalVersion ? queries.filter((query) => query.ok && query.body.table_version < finalVersion).length : null,
   unreadable_or_partial_observations: queries.filter((query) => !query.ok).length,
   r2_operation_counts: null,
   r2_operation_note: "R2 per-prefix request/byte counters are not exposed to this Worker; dataset payload bytes are reported above",

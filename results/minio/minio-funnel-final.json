@@ -1,0 +1,212 @@
+[
+  {
+    "checkpoint": {
+      "base_lance_version": 1,
+      "checksum": "c2d4421491c13ccad2bf5fad7e3236b93ae624db71d78eaee949be90ea1b0ee2",
+      "chunk_id": "minio-funnel-final:401:0:100",
+      "committed_lance_version": 2,
+      "created_at_ms": 1788287865315,
+      "retry_count": 0,
+      "row_count": 100,
+      "run_id": "minio-funnel-final",
+      "source_end": 100,
+      "source_start": 0,
+      "state": "committed",
+      "updated_at_ms": 1788287865356,
+      "writer_id": "producer-0"
+    },
+    "commit_attempts": 1,
+    "conflict_retries": 0,
+    "elapsed_ms": 211,
+    "peak_rss_kb": null
+  },
+  {
+    "checkpoint": {
+      "base_lance_version": 2,
+      "checksum": "d139cccb559e775639374fa5f993fa5289735311e7b946f8d192f0d438ac1237",
+      "chunk_id": "minio-funnel-final:401:100:100",
+      "committed_lance_version": 3,
+      "created_at_ms": 1788287865450,
+      "retry_count": 0,
+      "row_count": 100,
+      "run_id": "minio-funnel-final",
+      "source_end": 200,
+      "source_start": 100,
+      "state": "committed",
+      "updated_at_ms": 1788287865479,
+      "writer_id": "producer-1"
+    },
+    "commit_attempts": 1,
+    "conflict_retries": 0,
+    "elapsed_ms": 123,
+    "peak_rss_kb": null
+  },
+  {
+    "checkpoint": {
+      "base_lance_version": 3,
+      "checksum": "0fc076049593e6540baf9b0f2a637b1a0638248277d5d9048376fde5da5fa081",
+      "chunk_id": "minio-funnel-final:401:200:100",
+      "committed_lance_version": 4,
+      "created_at_ms": 1788287865579,
+      "retry_count": 0,
+      "row_count": 100,
+      "run_id": "minio-funnel-final",
+      "source_end": 300,
+      "source_start": 200,
+      "state": "committed",
+      "updated_at_ms": 1788287865598,
+      "writer_id": "producer-2"
+    },
+    "commit_attempts": 1,
+    "conflict_retries": 0,
+    "elapsed_ms": 115,
+    "peak_rss_kb": null
+  },
+  {
+    "checkpoint": {
+      "base_lance_version": 4,
+      "checksum": "65f401f70b5b90a0c4ae887a316ef80865322b4a068f985e718bc7cf4e23f12c",
+      "chunk_id": "minio-funnel-final:401:300:100",
+      "committed_lance_version": 5,
+      "created_at_ms": 1788287865720,
+      "retry_count": 0,
+      "row_count": 100,
+      "run_id": "minio-funnel-final",
+      "source_end": 400,
+      "source_start": 300,
+      "state": "committed",
+      "updated_at_ms": 1788287865742,
+      "writer_id": "producer-3"
+    },
+    "commit_attempts": 1,
+    "conflict_retries": 0,
+    "elapsed_ms": 144,
+    "peak_rss_kb": null
+  },
+  {
+    "checkpoint": {
+      "base_lance_version": 5,
+      "checksum": "87c40245567e9272105156cf9e8072abe171a38006e02799e0420e1b7741078e",
+      "chunk_id": "minio-funnel-final:401:400:100",
+      "committed_lance_version": 6,
+      "created_at_ms": 1788287865839,
+      "retry_count": 0,
+      "row_count": 100,
+      "run_id": "minio-funnel-final",
+      "source_end": 500,
+      "source_start": 400,
+      "state": "committed",
+      "updated_at_ms": 1788287865864,
+      "writer_id": "producer-4"
+    },
+    "commit_attempts": 1,
+    "conflict_retries": 0,
+    "elapsed_ms": 119,
+    "peak_rss_kb": null
+  },
+  {
+    "checkpoint": {
+      "base_lance_version": 6,
+      "checksum": "5545c3d481fd0a7792b9ea5cec2d2e4421d0829508da0b41a03c431e4b1e539f",
+      "chunk_id": "minio-funnel-final:401:500:100",
+      "committed_lance_version": 7,
+      "created_at_ms": 1788287865964,
+      "retry_count": 0,
+      "row_count": 100,
+      "run_id": "minio-funnel-final",
+      "source_end": 600,
+      "source_start": 500,
+      "state": "committed",
+      "updated_at_ms": 1788287865990,
+      "writer_id": "producer-5"
+    },
+    "commit_attempts": 1,
+    "conflict_retries": 0,
+    "elapsed_ms": 125,
+    "peak_rss_kb": null
+  },
+  {
+    "checkpoint": {
+      "base_lance_version": 7,
+      "checksum": "d9bd67d84547bebdfc9c9700acfc0aea611314c40df566d7795d4f544645db85",
+      "chunk_id": "minio-funnel-final:401:600:100",
+      "committed_lance_version": 8,
+      "created_at_ms": 1788287866091,
+      "retry_count": 0,
+      "row_count": 100,
+      "run_id": "minio-funnel-final",
+      "source_end": 700,
+      "source_start": 600,
+      "state": "committed",
+      "updated_at_ms": 1788287866124,
+      "writer_id": "producer-6"
+    },
+    "commit_attempts": 1,
+    "conflict_retries": 0,
+    "elapsed_ms": 132,
+    "peak_rss_kb": null
+  },
+  {
+    "checkpoint": {
+      "base_lance_version": 8,
+      "checksum": "2cbaffe63c241f3e22e321014ed31eebffc75e2fdce35ee4925610562654d431",
+      "chunk_id": "minio-funnel-final:401:700:100",
+      "committed_lance_version": 9,
+      "created_at_ms": 1788287866227,
+      "retry_count": 0,
+      "row_count": 100,
+      "run_id": "minio-funnel-final",
+      "source_end": 800,
+      "source_start": 700,
+      "state": "committed",
+      "updated_at_ms": 1788287866262,
+      "writer_id": "producer-7"
+    },
+    "commit_attempts": 1,
+    "conflict_retries": 0,
+    "elapsed_ms": 135,
+    "peak_rss_kb": null
+  },
+  {
+    "checkpoint": {
+      "base_lance_version": 9,
+      "checksum": "f2940106f9c78f910583533e0a18090da266a8d8c3f644b96eb6fbcb06196b14",
+      "chunk_id": "minio-funnel-final:401:800:100",
+      "committed_lance_version": 10,
+      "created_at_ms": 1788287866360,
+      "retry_count": 0,
+      "row_count": 100,
+      "run_id": "minio-funnel-final",
+      "source_end": 900,
+      "source_start": 800,
+      "state": "committed",
+      "updated_at_ms": 1788287866397,
+      "writer_id": "producer-8"
+    },
+    "commit_attempts": 1,
+    "conflict_retries": 0,
+    "elapsed_ms": 134,
+    "peak_rss_kb": null
+  },
+  {
+    "checkpoint": {
+      "base_lance_version": 10,
+      "checksum": "69cd40abe21fbb40b82d5a3f18fb5b6f190d8be8fdf14c389eaef16ea85896b4",
+      "chunk_id": "minio-funnel-final:401:900:100",
+      "committed_lance_version": 11,
+      "created_at_ms": 1788287866496,
+      "retry_count": 0,
+      "row_count": 100,
+      "run_id": "minio-funnel-final",
+      "source_end": 1000,
+      "source_start": 900,
+      "state": "committed",
+      "updated_at_ms": 1788287866538,
+      "writer_id": "producer-9"
+    },
+    "commit_attempts": 1,
+    "conflict_retries": 0,
+    "elapsed_ms": 140,
+    "peak_rss_kb": null
+  }
+]

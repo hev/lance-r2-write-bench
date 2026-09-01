@@ -23,6 +23,17 @@ export function timingSafeEqual(left, right) {
   return difference === 0;
 }
 
+export function checkpointTransitionAllowed(from, to) {
+  return new Set([
+    "prepared:commit-attempted",
+    "prepared:committed",
+    "commit-attempted:commit-attempted",
+    "commit-attempted:committed",
+    "commit-attempted:failed",
+    "committed:committed",
+  ]).has(`${from}:${to}`);
+}
+
 export function validateRun(input, maxWriters) {
   const mode = input.mode || "independent";
   if (!['independent', 'funnel'].includes(mode)) throw new Error("mode must be independent or funnel");
